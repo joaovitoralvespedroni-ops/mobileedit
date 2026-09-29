@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { MODULES, SITE } from "./config";
 import { Countdown } from "./components/Countdown";
+import { GroupLink } from "./components/GroupLink";
 import { Reveal } from "./components/Reveal";
 import { TiltCard } from "./components/TiltCard";
 
@@ -55,21 +56,21 @@ function Lock({ className = "" }: { className?: string }) {
 function CTA({
   label = "Quero o mega desconto",
   sub = true,
+  location = "cta",
 }: {
   label?: string;
   sub?: boolean;
+  location?: string;
 }) {
   return (
     <div className="flex flex-col items-center gap-3">
-      <a
-        href={SITE.groupUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <GroupLink
+        location={location}
         className="btn-shine group relative inline-flex w-full max-w-md items-center justify-center gap-3 rounded-2xl bg-gradient-to-b from-neon-400 to-neon-deep px-8 py-5 font-display text-xl font-extrabold uppercase italic tracking-wide text-white shadow-[0_10px_40px_-8px_rgba(30,144,255,.8)] ring-1 ring-white/20 transition hover:-translate-y-0.5 hover:shadow-[0_14px_50px_-6px_rgba(30,144,255,1)] animate-pulse-glow sm:text-2xl"
       >
         {label}
         <Arrow className="h-6 w-6 transition group-hover:translate-x-1" />
-      </a>
+      </GroupLink>
       {sub && (
         <p className="text-center text-sm text-slate-400">
           Entrar no Grupo VIP é <span className="text-neon-300">grátis</span> · Desconto de lançamento{" "}
@@ -239,14 +240,12 @@ export default function Home() {
             <span className="mr-2 inline-block rounded bg-ink-950 px-2 py-0.5 text-amber-300 not-italic">Pré-lançamento</span>
             O curso ainda não abriu · Entre no Grupo VIP e garanta o <span className="underline decoration-2 underline-offset-2">mega desconto</span>
           </p>
-          <a
-            href={SITE.groupUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <GroupLink
+            location="barra-topo"
             className="hidden shrink-0 rounded-lg bg-ink-950 px-4 py-2 font-display text-sm font-extrabold uppercase italic text-amber-300 transition hover:bg-ink-800 sm:inline-block"
           >
             Entrar no grupo →
-          </a>
+          </GroupLink>
         </div>
       </div>
 
@@ -973,14 +972,12 @@ export default function Home() {
 
       {/* CTA fixo no mobile */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-amber-300/30 bg-ink-950/90 p-3 backdrop-blur sm:hidden">
-        <a
-          href={SITE.groupUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <GroupLink
+          location="fixo-mobile"
           className="btn-shine relative flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-neon-400 to-neon-deep py-3.5 font-display text-lg font-extrabold uppercase italic text-white"
         >
           Garantir mega desconto no VIP <Arrow className="h-5 w-5" />
-        </a>
+        </GroupLink>
       </div>
     </main>
   );

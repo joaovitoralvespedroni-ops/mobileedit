@@ -2,7 +2,8 @@
 
 export const SITE = {
   // Link do grupo VIP (WhatsApp, Telegram etc.)
-  groupUrl: "https://chat.whatsapp.com/SEU-LINK-AQUI",
+  groupUrl: "https://chat.whatsapp.com/EUQTzOxPTdNDNJzBzJNeEC?mode=gi_t",
+  metaPixelId: "1032317759858705",
   courseName: "Mobile Edit",
   instructorName: "Pedro",
   instructorHandle: "@venicius.pedro",

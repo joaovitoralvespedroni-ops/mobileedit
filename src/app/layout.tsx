@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
+import { SITE } from "./config";
+import { MetaPixel } from "./components/MetaPixel";
 
 const barlow = Barlow({
   variable: "--font-body",
@@ -31,7 +33,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${barlow.variable} ${barlowCondensed.variable} antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <MetaPixel id={SITE.metaPixelId} />
+      </body>
     </html>
   );
 }
