@@ -1,55 +1,57 @@
+import type { Metadata } from "next";
 import Image from "next/image";
-import { MODULES, SITE } from "./config";
-import { Countdown } from "./components/Countdown";
-import { GroupLink } from "./components/GroupLink";
-import { Reveal } from "./components/Reveal";
-import { TiltCard } from "./components/TiltCard";
-import { Arrow, Check, Cross, Lock, Phone, SectionHeader } from "./components/ui";
-import { BEFORE_AFTER, COMPARE, COSTS, LEARN, PAINS, PROFILES } from "./copy";
+import { MODULES, OFFER, SITE } from "../config";
+import { BEFORE_AFTER, COMPARE, COSTS, LEARN, PAINS, PROFILES } from "../copy";
+import { CheckoutLink } from "../components/CheckoutLink";
+import { Countdown } from "../components/Countdown";
+import { Reveal } from "../components/Reveal";
+import { Arrow, Bolt, Check, Cross, Lock, Phone, SectionHeader, Shield } from "../components/ui";
 
-/* ---------- blocos reutilizáveis ---------- */
+export const metadata: Metadata = {
+  title: "Mobile Edit · Curso de Edição Profissional no Celular",
+  description:
+    "Aprenda a editar vídeos profissionais no CapCut usando só o celular, com IA. 13 módulos do zero ao avançado, com acesso imediato.",
+};
 
-function CTA({
-  label = "Quero o mega desconto",
-  sub = true,
-  location = "cta",
-}: {
-  label?: string;
-  sub?: boolean;
-  location?: string;
-}) {
+const brl = (n: number) => `R$ ${n.toLocaleString("pt-BR")}`;
+const STACK_TOTAL = OFFER.stack.reduce((sum, s) => sum + s.value, 0);
+
+/* ---------- blocos ---------- */
+
+function CTA({ label = "Quero o Mobile Edit", sub = true, location = "cta" }: { label?: string; sub?: boolean; location?: string }) {
   return (
     <div className="flex flex-col items-center gap-3">
-      <GroupLink
+      <CheckoutLink
         location={location}
         className="btn-shine group relative inline-flex w-full max-w-md items-center justify-center gap-3 rounded-2xl bg-gradient-to-b from-neon-400 to-neon-deep px-8 py-5 font-display text-xl font-extrabold uppercase italic tracking-wide text-white shadow-[0_10px_40px_-8px_rgba(30,144,255,.8)] ring-1 ring-white/20 transition hover:-translate-y-0.5 hover:shadow-[0_14px_50px_-6px_rgba(30,144,255,1)] animate-pulse-glow sm:text-2xl"
       >
         {label}
         <Arrow className="h-6 w-6 transition group-hover:translate-x-1" />
-      </GroupLink>
+      </CheckoutLink>
       {sub && (
-        <p className="text-center text-sm text-slate-400">
-          Entrar no Grupo VIP é <span className="text-neon-300">grátis</span> · Desconto de lançamento{" "}
-          <span className="text-gold font-semibold">só para o grupo</span>
+        <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-sm text-slate-400">
+          <span className="inline-flex items-center gap-1.5"><Bolt className="h-4 w-4 text-neon-300" /> Acesso imediato</span>
+          <span className="inline-flex items-center gap-1.5"><Lock className="h-4 w-4 text-neon-300" /> Compra segura</span>
+          <span className="inline-flex items-center gap-1.5"><Shield className="h-4 w-4 text-gold" /> Garantia de {OFFER.guaranteeDays} dias</span>
         </p>
       )}
     </div>
   );
 }
 
-/* Faixa de chamada entre seções: lembra do desconto a cada etapa da leitura. */
-function DiscountBand({ title, text, label }: { title: React.ReactNode; text: string; label?: string }) {
+/* Faixa de chamada entre seções. */
+function CTABand({ title, text, label }: { title: React.ReactNode; text: string; label?: string }) {
   return (
     <section className="px-4 py-10">
       <Reveal className="border-spin relative mx-auto max-w-5xl overflow-hidden rounded-3xl bg-gradient-to-r from-ink-800 via-ink-900 to-ink-800">
-        <div className="pointer-events-none absolute -left-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full bg-amber-300/20 blur-3xl" />
+        <div className="pointer-events-none absolute -left-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full bg-neon/20 blur-3xl" />
         <div className="relative flex flex-col items-center gap-6 p-8 text-center md:flex-row md:justify-between md:text-left">
           <div>
             <p className="font-display text-2xl font-extrabold uppercase italic leading-tight sm:text-3xl">{title}</p>
             <p className="mt-2 text-slate-300">{text}</p>
           </div>
           <div className="w-full shrink-0 md:w-auto">
-            <CTA label={label} sub={false} />
+            <CTA label={label} sub={false} location="faixa" />
           </div>
         </div>
       </Reveal>
@@ -57,33 +59,16 @@ function DiscountBand({ title, text, label }: { title: React.ReactNode; text: st
   );
 }
 
-/* ---------- dados de copy ---------- */
-
-const LAUNCH_STEPS = [
-  { t: "Entre no Grupo VIP", d: "É grátis. Um clique e você está dentro do grupo oficial do lançamento." },
-  { t: "Tire suas dúvidas", d: "Acompanhe os avisos e pergunte tudo sobre o curso antes de decidir." },
-  { t: "Pegue o mega desconto", d: "No dia do lançamento, o grupo recebe primeiro o link de compra com o desconto exclusivo." },
-];
-
-const VIP_PERKS = [
-  { title: "Mega desconto de lançamento", text: "O menor preço que o Mobile Edit vai ter. Exclusivo para quem estiver no grupo no dia da abertura." },
-  { title: "Compra antes de todo mundo", text: "O link chega primeiro para o grupo. O público geral só fica sabendo depois." },
-  { title: "Tire suas dúvidas", text: "Pergunte sobre o curso, os módulos e o formato antes de investir." },
-  { title: SITE.bonus.title, text: SITE.bonus.description },
-];
+/* ---------- copy ---------- */
 
 const FAQ = [
   {
-    q: "O curso é gratuito?",
-    a: "Não. O Mobile Edit é um curso pago. O que é gratuito é entrar no Grupo VIP, que é onde você recebe o mega desconto de lançamento para comprar o curso, se quiser.",
+    q: "Como recebo o acesso?",
+    a: "Logo após a confirmação do pagamento, você recebe no seu e-mail os dados de acesso à área de membros. É só entrar e começar.",
   },
   {
-    q: "Pra que serve o Grupo VIP?",
-    a: "É o grupo oficial do lançamento. Lá você recebe os avisos, tira dúvidas sobre o curso e, no dia da abertura, recebe o link de compra com o mega desconto exclusivo.",
-  },
-  {
-    q: "Se eu não entrar no grupo, ainda consigo o desconto?",
-    a: "O mega desconto de lançamento é exclusivo para quem estiver no Grupo VIP. Quem comprar depois, fora do grupo, paga o valor normal.",
+    q: "E se eu não gostar?",
+    a: `Você tem ${OFFER.guaranteeDays} dias de garantia. Se achar que o curso não é pra você, pede o reembolso dentro do prazo e recebe 100% do valor de volta, sem burocracia.`,
   },
   {
     q: "Preciso de computador?",
@@ -101,28 +86,32 @@ const FAQ = [
     q: "Já sou videomaker. Vou aprender algo novo?",
     a: "Sim. Há módulos de técnicas avançadas no CapCut, vídeos com IA e precificação, focados em aumentar a qualidade e o valor do seu trabalho.",
   },
+  {
+    q: "Quais as formas de pagamento?",
+    a: "As formas disponíveis aparecem na página de pagamento segura, logo depois de clicar no botão de compra.",
+  },
 ];
 
 /* ---------- página ---------- */
 
-export default function Home() {
+export default function Curso() {
   const heroCovers = [MODULES[10], MODULES[0], MODULES[11]];
 
   return (
     <main className="relative">
-      {/* BARRA FIXA DE PRÉ-LANÇAMENTO */}
-      <div className="sticky top-0 z-40 border-b border-amber-300/30 bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 text-ink-950 shadow-[0_6px_30px_-6px_rgba(251,191,36,.6)]">
+      {/* BARRA FIXA DA OFERTA */}
+      <div className="sticky top-0 z-40 border-b border-neon/30 bg-gradient-to-r from-neon-deep via-neon-400 to-neon-deep text-white shadow-[0_6px_30px_-6px_rgba(30,144,255,.6)]">
         <div className="mx-auto flex max-w-6xl items-center justify-center gap-4 px-4 py-2.5 text-center sm:justify-between">
           <p className="font-display text-sm font-extrabold uppercase italic leading-tight tracking-wide sm:text-base">
-            <span className="mr-2 inline-block rounded bg-ink-950 px-2 py-0.5 text-amber-300 not-italic">Pré-lançamento</span>
-            O curso ainda não abriu · Entre no Grupo VIP e garanta o <span className="underline decoration-2 underline-offset-2">mega desconto</span>
+            <span className="mr-2 inline-block rounded bg-ink-950 px-2 py-0.5 text-neon-300 not-italic">Oferta especial</span>
+            Condição de lançamento por <span className="underline decoration-2 underline-offset-2">tempo limitado</span>
           </p>
-          <GroupLink
+          <CheckoutLink
             location="barra-topo"
-            className="hidden shrink-0 rounded-lg bg-ink-950 px-4 py-2 font-display text-sm font-extrabold uppercase italic text-amber-300 transition hover:bg-ink-800 sm:inline-block"
+            className="hidden shrink-0 rounded-lg bg-ink-950 px-4 py-2 font-display text-sm font-extrabold uppercase italic text-neon-300 transition hover:bg-ink-800 sm:inline-block"
           >
-            Entrar no grupo →
-          </GroupLink>
+            Quero o curso →
+          </CheckoutLink>
         </div>
       </div>
 
@@ -136,12 +125,12 @@ export default function Home() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
           <div className="text-center lg:text-left">
             <div className="mb-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
-              <span className="inline-flex items-center gap-2 rounded-full border border-amber-300/50 bg-amber-300/10 px-4 py-1.5 font-display text-sm font-extrabold uppercase italic tracking-wider text-amber-200">
+              <span className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-4 py-1.5 font-display text-sm font-extrabold uppercase italic tracking-wider text-neon-300">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-300 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-300" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-300 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-300" />
                 </span>
-                Pré-lançamento oficial
+                Inscrições abertas
               </span>
               <span className="rounded-full border border-neon/40 bg-neon/10 px-4 py-1.5 font-display text-sm font-bold uppercase italic tracking-wider text-neon-300">
                 Mobile Edit · com {SITE.instructorName}
@@ -159,26 +148,17 @@ export default function Home() {
               entregar vídeos de alto nível e <strong className="text-white">cobrar mais por isso</strong>. Sem PC.
             </p>
 
-            {/* caixa do desconto */}
-            <div className="relative mx-auto mt-7 max-w-xl overflow-hidden rounded-2xl border border-amber-300/50 bg-gradient-to-br from-amber-300/15 via-ink-900 to-ink-900 p-5 text-left shadow-[0_0_50px_-15px_rgba(251,191,36,.7)] lg:mx-0">
-              <div className="flex items-center gap-4">
-                <div className="grid h-16 w-16 shrink-0 place-items-center rounded-xl bg-gradient-to-b from-amber-200 to-amber-500 font-display text-4xl font-black italic text-ink-950 shadow-[0_0_30px_-4px_rgba(251,191,36,.9)]">
-                  %
-                </div>
-                <div>
-                  <p className="font-display text-2xl font-black uppercase italic leading-none text-gold sm:text-3xl">
-                    Mega desconto de lançamento
-                  </p>
-                  <p className="mt-1.5 text-sm text-slate-300 sm:text-base">
-                    O curso abre em breve. <strong className="text-white">Só quem estiver no Grupo VIP</strong> recebe o
-                    link de compra com o desconto exclusivo no dia do lançamento.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <ul className="mx-auto mt-7 grid max-w-xl gap-3 text-left sm:grid-cols-2 lg:mx-0">
+              {["13 módulos do zero ao avançado", "Acesso imediato após a compra", "Android e iPhone", `Garantia de ${OFFER.guaranteeDays} dias`].map((t) => (
+                <li key={t} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 font-medium text-white">
+                  <Check className="h-6 w-6 shrink-0" />
+                  {t}
+                </li>
+              ))}
+            </ul>
 
             <div className="mt-8 lg:max-w-md">
-              <CTA label="Quero entrar no Grupo VIP" />
+              <CTA label="Quero começar agora" location="hero" />
             </div>
           </div>
 
@@ -207,43 +187,9 @@ export default function Home() {
                 </div>
               );
             })}
-            <div className="absolute -bottom-2 left-1/2 z-30 -translate-x-1/2 -rotate-3 whitespace-nowrap rounded-xl bg-gradient-to-b from-amber-200 to-amber-500 px-5 py-2 font-display text-lg font-black uppercase italic text-ink-950 shadow-[0_10px_40px_-5px_rgba(251,191,36,.8)] sm:text-xl">
-              Em breve · 13 módulos
+            <div className="absolute -bottom-2 left-1/2 z-30 -translate-x-1/2 -rotate-3 whitespace-nowrap rounded-xl bg-gradient-to-b from-neon-300 to-neon-deep px-5 py-2 font-display text-lg font-black uppercase italic text-white shadow-[0_10px_40px_-5px_rgba(30,144,255,.8)] sm:text-xl">
+              13 módulos · acesso imediato
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* COMO FUNCIONA O PRÉ-LANÇAMENTO */}
-      <section className="relative border-y border-white/5 bg-ink-900/60 px-4 py-14">
-        <div className="mx-auto max-w-6xl">
-          <Reveal className="mb-10 text-center">
-            <p className="eyebrow mb-3">Como funciona o pré-lançamento</p>
-            <p className="font-display text-3xl font-extrabold uppercase italic sm:text-4xl">
-              <span className="text-chrome">Entra no grupo hoje.</span>{" "}
-              <span className="text-gold">Compra com desconto no lançamento.</span>
-            </p>
-          </Reveal>
-          <div className="relative grid gap-8 md:grid-cols-3">
-            <div className="pointer-events-none absolute left-[16%] right-[16%] top-8 hidden h-[2px] bg-gradient-to-r from-neon/0 via-neon to-amber-300 shadow-[0_0_12px_#1e90ff] md:block" />
-            {LAUNCH_STEPS.map((s, i) => {
-              const last = i === LAUNCH_STEPS.length - 1;
-              return (
-                <Reveal key={s.t} delay={i * 150} className="relative text-center">
-                  <div
-                    className={`mx-auto grid h-16 w-16 place-items-center rounded-full border-2 bg-ink-950 font-display text-3xl font-black italic ${
-                      last
-                        ? "border-amber-300 text-amber-200 shadow-[0_0_30px_-2px_rgba(251,191,36,.9)]"
-                        : "border-neon text-white shadow-[0_0_30px_-2px_rgba(30,144,255,.9)]"
-                    }`}
-                  >
-                    {last ? "%" : i + 1}
-                  </div>
-                  <h3 className={`mt-4 font-display text-2xl font-extrabold uppercase italic ${last ? "text-gold" : "text-white"}`}>{s.t}</h3>
-                  <p className="mx-auto mt-1 max-w-xs text-slate-400">{s.d}</p>
-                </Reveal>
-              );
-            })}
           </div>
         </div>
       </section>
@@ -387,14 +333,14 @@ export default function Home() {
         </div>
       </section>
 
-      <DiscountBand
+      <CTABand
         title={
           <>
-            <span className="text-chrome">Quer essa virada?</span> <span className="text-gold">Começa pelo desconto.</span>
+            <span className="text-chrome">Quer essa virada?</span> <span className="text-gradient">Começa hoje.</span>
           </>
         }
-        text="Entre no Grupo VIP agora e garanta o preço de lançamento quando o curso abrir."
-        label="Garantir meu desconto"
+        text="Acesso liberado logo após a compra. Você pode editar seu primeiro vídeo ainda hoje."
+        label="Quero começar hoje"
       />
 
       {/* MÓDULOS */}
@@ -430,14 +376,6 @@ export default function Home() {
                 </div>
               </article>
             ))}
-
-            <div className="w-[72%] shrink-0 snap-center sm:w-auto">
-              <div className="flex aspect-[2/3] flex-col items-center justify-center rounded-3xl border border-amber-300/50 bg-gradient-to-b from-amber-300/15 to-ink-950 p-6 text-center shadow-[0_0_40px_-12px_rgba(251,191,36,.7)]">
-                <p className="font-display text-7xl font-black italic text-gold">+</p>
-                <p className="mt-2 font-display text-2xl font-extrabold uppercase italic text-white">Bônus exclusivo</p>
-                <p className="mt-2 text-sm text-slate-400">Revelado só dentro do Grupo VIP</p>
-              </div>
-            </div>
           </div>
           <p className="mt-2 text-center text-sm text-slate-500 sm:hidden">Arraste para o lado para ver todos →</p>
         </div>
@@ -565,217 +503,115 @@ export default function Home() {
         </section>
       )}
 
-      {/* PREÇO TRANCADO */}
-      <section className="relative overflow-hidden px-4 py-20 lg:py-28">
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-300/10 blur-[120px]" />
-        <div className="relative mx-auto max-w-5xl">
+      {/* OFERTA: ancoragem → cronômetro → preço */}
+      <section id="oferta" className="relative scroll-mt-16 overflow-hidden px-4 py-24 lg:py-32">
+        <div className="bg-grid pointer-events-none absolute inset-0 opacity-70" />
+        <div className="pointer-events-none absolute left-1/2 top-1/3 h-[620px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/15 blur-[140px]" />
+
+        <div className="relative mx-auto max-w-3xl">
           <SectionHeader
-            eyebrow="E quanto vai custar?"
+            eyebrow="Tudo que você recebe"
             title={
               <>
-                <span className="text-chrome">O preço é revelado</span> <span className="text-gold">no lançamento</span>
+                <span className="text-chrome">O método completo</span> <span className="text-gradient">numa só compra</span>
               </>
             }
           >
-            O Mobile Edit é um curso pago. Mas quem estiver no Grupo VIP no dia da abertura paga bem menos que todo mundo.
+            Se cada parte do Mobile Edit fosse vendida separada, ficaria assim:
           </SectionHeader>
 
-          <div className="grid items-stretch gap-6 md:grid-cols-2">
-            <Reveal>
-              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.02] p-8 text-center">
-                <p className="text-sm font-bold uppercase tracking-[0.3em] text-slate-500">Público geral</p>
-                <p className="mt-6 select-none font-display text-6xl font-black italic text-slate-500">R$ ???</p>
-                <p className="mt-2 text-sm font-semibold uppercase tracking-wider text-slate-500">Preço cheio</p>
-                <ul className="mt-8 space-y-3 text-left text-slate-400">
-                  <li className="flex gap-3"><Cross className="h-5 w-5 shrink-0" /> Fica sabendo depois</li>
-                  <li className="flex gap-3"><Cross className="h-5 w-5 shrink-0" /> Sem desconto de lançamento</li>
-                  <li className="flex gap-3"><Cross className="h-5 w-5 shrink-0" /> Sem o bônus exclusivo</li>
-                </ul>
-              </div>
-            </Reveal>
-            <Reveal delay={150}>
-              <div className="relative flex h-full flex-col rounded-3xl border-2 border-amber-300/70 bg-gradient-to-b from-amber-300/15 to-ink-900 p-8 text-center shadow-[0_0_70px_-15px_rgba(251,191,36,.8)]">
-                <span className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-b from-amber-200 to-amber-500 px-4 py-1 font-display text-sm font-black uppercase italic text-ink-950">
-                  Grupo VIP
-                </span>
-                <p className="text-sm font-bold uppercase tracking-[0.3em] text-amber-200">Membros do grupo</p>
-                <div className="mt-6 flex items-center justify-center gap-3">
-                  <Lock className="h-10 w-10 text-amber-300" />
-                  <p className="font-display text-5xl font-black uppercase italic leading-none text-gold sm:text-6xl">Mega desconto</p>
-                </div>
-                <p className="mt-2 text-sm font-semibold uppercase tracking-wider text-amber-200/80">Liberado no dia do lançamento</p>
-                <ul className="mt-8 space-y-3 text-left text-white">
-                  <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Recebe o link antes de todo mundo</li>
-                  <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Menor preço que o curso vai ter</li>
-                  <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Bônus exclusivo para membros</li>
-                </ul>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* GRUPO VIP */}
-      <section id="vip" className="relative overflow-hidden px-4 py-24 lg:py-32">
-        <div className="bg-grid pointer-events-none absolute inset-0 opacity-70" />
-        <div className="pointer-events-none absolute left-1/2 top-1/3 h-[620px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/20 blur-[140px]" />
-        <div className="beam left-[6%] top-32 hidden h-80 lg:block" />
-        <div className="beam right-[6%] top-56 hidden h-64 lg:block [animation-delay:2s]" />
-
-        <div className="relative mx-auto max-w-6xl">
-          <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr]">
-            <div>
-              <Reveal>
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-amber-200">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-amber-300" />
-                  Grupo oficial do lançamento
-                </div>
-                <h2 className="h-section">
-                  <span className="text-chrome">Seu lugar no</span>
-                  <br />
-                  <span className="text-gradient drop-shadow-[0_0_30px_rgba(30,144,255,.5)]">Grupo VIP</span>
-                </h2>
-                <p className="mt-5 max-w-lg text-lg text-slate-300">
-                  É o grupo onde o Mobile Edit vai ser lançado. Entrar é grátis. Quem está lá dentro recebe o{" "}
-                  <strong className="text-gold">mega desconto</strong> e decide, no dia, se quer comprar o curso.
-                </p>
-              </Reveal>
-
-              <div className="mt-8 space-y-4">
-                {VIP_PERKS.map((p, i) => {
-                  const featured = i === 0;
-                  const isBonus = i === VIP_PERKS.length - 1;
-                  return (
-                    <Reveal key={p.title} delay={i * 110}>
-                      <div
-                        className={`flex items-start gap-4 rounded-2xl p-5 transition duration-300 hover:translate-x-1 ${
-                          featured
-                            ? "border-2 border-amber-300/70 bg-gradient-to-r from-amber-300/15 to-ink-900 shadow-[0_0_40px_-12px_rgba(251,191,36,.8)]"
-                            : isBonus
-                              ? "border-spin bg-gradient-to-r from-neon/20 to-ink-900"
-                              : "border border-white/10 bg-white/[0.03]"
-                        }`}
-                      >
-                        <div
-                          className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl font-display text-2xl font-black italic ${
-                            featured
-                              ? "bg-gradient-to-b from-amber-200 to-amber-500 text-ink-950 shadow-[0_0_24px_-4px_rgba(251,191,36,.9)]"
-                              : "bg-gradient-to-b from-neon-400 to-neon-deep text-white shadow-[0_0_24px_-4px_rgba(30,144,255,.9)]"
-                          }`}
-                        >
-                          {featured ? "%" : isBonus ? "★" : i + 1}
-                        </div>
-                        <div>
-                          <h3 className={`font-display text-xl font-extrabold uppercase italic sm:text-2xl ${featured ? "text-gold" : "text-white"}`}>
-                            {p.title}
-                          </h3>
-                          <p className="mt-1 text-slate-300">{p.text}</p>
-                        </div>
-                      </div>
-                    </Reveal>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* passe VIP */}
-            <Reveal delay={200}>
-              <TiltCard className="relative mx-auto w-full max-w-[440px]">
-                <div className="absolute -inset-6 rounded-[2.5rem] bg-neon/30 blur-3xl" />
-                <div className="ticket-notch relative overflow-hidden rounded-[2rem] border border-neon/50 bg-gradient-to-br from-ink-700 via-ink-900 to-ink-950 shadow-[0_30px_80px_-20px_rgba(30,144,255,.9)]">
-                  <div className="holo pointer-events-none absolute inset-0" />
-                  <div className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
-
-                  <div className="relative p-7 sm:p-8">
-                    <div className="flex items-center justify-between">
-                      <p className="font-display text-xl font-black uppercase italic">
-                        <span className="text-chrome">Mobile</span> <span className="text-gradient">Edit</span>
-                      </p>
-                      <span className="rounded-md border border-amber-300/60 bg-amber-300/10 px-2 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200">
-                        Pré-lançamento
-                      </span>
-                    </div>
-
-                    <p className="mt-10 text-xs font-bold uppercase tracking-[0.4em] text-neon-400">Passe de acesso</p>
-                    <p className="font-display text-7xl font-black uppercase italic leading-none sm:text-8xl">
-                      <span className="text-gradient drop-shadow-[0_0_24px_rgba(34,211,238,.55)]">VIP</span>
-                    </p>
-
-                    <div className="mt-8 grid grid-cols-2 gap-5 text-sm">
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Titular</p>
-                        <p className="font-display text-xl font-bold uppercase italic text-white">Você</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Instrutor</p>
-                        <p className="font-display text-xl font-bold uppercase italic text-white">{SITE.instructorName}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Entrada no grupo</p>
-                        <p className="font-display text-xl font-bold uppercase italic text-neon-300">Grátis</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Curso</p>
-                        <p className="font-display text-xl font-bold uppercase italic text-gold">Com desconto</p>
-                      </div>
-                    </div>
+          {/* lista de valor */}
+          <Reveal className="neon-frame overflow-hidden bg-ink-900/80">
+            <ul>
+              {OFFER.stack.map((s, i) => (
+                <li
+                  key={s.title}
+                  className={`flex items-center gap-4 p-5 sm:p-6 ${i > 0 ? "border-t border-white/5" : ""}`}
+                >
+                  <Check className="h-7 w-7 shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-display text-lg font-extrabold uppercase italic leading-tight text-white sm:text-xl">{s.title}</p>
+                    <p className="mt-0.5 text-sm text-slate-400">{s.detail}</p>
                   </div>
-
-                  <div className="relative mx-7 border-t-2 border-dashed border-white/15" />
-
-                  <div className="relative flex items-center justify-between gap-4 p-7 sm:p-8">
-                    <div className="flex h-12 flex-1 items-end gap-[3px]" aria-hidden>
-                      {Array.from({ length: 34 }).map((_, i) => (
-                        <span
-                          key={i}
-                          className="bg-white/70"
-                          style={{ width: i % 3 === 0 ? 3 : i % 5 === 0 ? 4 : 1.5, height: `${60 + ((i * 37) % 40)}%` }}
-                        />
-                      ))}
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Válido para</p>
-                      <p className="font-display text-lg font-bold uppercase italic leading-tight text-white">
-                        Mega desconto <span className="text-amber-200">+ bônus</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </TiltCard>
-            </Reveal>
-          </div>
-
-          {/* o que é / o que não é */}
-          <Reveal className="mx-auto mt-20 grid max-w-4xl gap-5 md:grid-cols-2">
-            <div className="rounded-2xl border border-neon/40 bg-neon/[0.06] p-7">
-              <p className="font-display text-2xl font-extrabold uppercase italic text-white">O grupo é</p>
-              <ul className="mt-4 space-y-3 text-slate-200">
-                <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> O grupo oficial do lançamento do Mobile Edit</li>
-                <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Onde você tira dúvidas sobre o curso</li>
-                <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Onde chega o link com o mega desconto</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-7">
-              <p className="font-display text-2xl font-extrabold uppercase italic text-slate-300">O grupo não é</p>
-              <ul className="mt-4 space-y-3 text-slate-400">
-                <li className="flex gap-3"><Cross className="h-5 w-5 shrink-0" /> Um curso gratuito ou aulas de graça</li>
-                <li className="flex gap-3"><Cross className="h-5 w-5 shrink-0" /> Grupo de bate-papo ou divulgação</li>
-                <li className="flex gap-3"><Cross className="h-5 w-5 shrink-0" /> Compromisso de compra: você decide no dia</li>
-              </ul>
+                  <p className="shrink-0 font-display text-lg font-bold italic text-slate-400 sm:text-xl">{brl(s.value)}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="flex items-center justify-between gap-4 border-t border-white/10 bg-white/[0.03] p-5 sm:p-6">
+              <p className="font-display text-xl font-extrabold uppercase italic text-slate-300 sm:text-2xl">Valor total</p>
+              <p className="font-display text-3xl font-black italic text-red-400 line-through decoration-2 sm:text-4xl">
+                {brl(STACK_TOTAL)}
+              </p>
             </div>
           </Reveal>
 
-          {SITE.launchDate && (
-            <div className="mt-16">
-              <p className="eyebrow mb-5 text-center">O carrinho abre em</p>
-              <Countdown target={SITE.launchDate} />
-            </div>
-          )}
+          <Reveal className="mt-14 text-center">
+            <p className="font-display text-2xl font-extrabold uppercase italic leading-tight text-white sm:text-4xl">
+              Mas você não vai pagar <span className="text-red-400">{brl(STACK_TOTAL)}</span>.
+            </p>
+            <p className="mt-3 text-lg text-slate-300">Nem metade disso. Nem perto.</p>
+          </Reveal>
 
-          <div className="mt-14">
-            <CTA label="Quero o mega desconto" />
-          </div>
+          {/* cartão de preço */}
+          <Reveal className="mt-12">
+            <div className="relative overflow-hidden rounded-[2rem] border-2 border-amber-300/70 bg-gradient-to-b from-amber-300/15 via-ink-900 to-ink-950 px-6 pb-10 pt-12 text-center shadow-[0_0_90px_-20px_rgba(251,191,36,.8)] sm:px-12">
+              <span className="absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap rounded-b-xl bg-gradient-to-b from-amber-200 to-amber-500 px-5 py-1.5 font-display text-sm font-black uppercase italic text-ink-950">
+                Condição especial
+              </span>
+
+              {OFFER.endsAt && (
+                <div className="mb-10">
+                  <p className="eyebrow mb-5 text-center">Esse preço acaba em</p>
+                  <Countdown target={OFFER.endsAt} />
+                </div>
+              )}
+
+              <p className="text-sm font-bold uppercase tracking-[0.3em] text-slate-400">
+                De <span className="text-red-400 line-through decoration-2">{brl(STACK_TOTAL)}</span> por apenas
+              </p>
+              <p className="mt-3 font-display font-black italic leading-none text-gold drop-shadow-[0_0_40px_rgba(251,191,36,.45)]">
+                <span className="align-top text-4xl sm:text-5xl">R$</span>
+                <span className="text-[7rem] sm:text-[9rem]">{OFFER.price}</span>
+              </p>
+              <p className="mt-2 text-slate-300">
+                {OFFER.installments ?? "pagamento único"} · acesso imediato
+              </p>
+
+              <ul className="mx-auto mt-8 max-w-sm space-y-3 text-left text-white">
+                <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Os 13 módulos completos</li>
+                <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Do zero ao avançado, no celular</li>
+                <li className="flex gap-3"><Check className="h-5 w-5 shrink-0" /> Garantia de {OFFER.guaranteeDays} dias</li>
+              </ul>
+
+              <div className="mt-10">
+                <CTA label={`Quero garantir por R$ ${OFFER.price}`} location="oferta" />
+              </div>
+            </div>
+          </Reveal>
         </div>
+      </section>
+
+      {/* GARANTIA */}
+      <section className="relative px-4 pb-20 lg:pb-28">
+        <Reveal className="mx-auto flex max-w-4xl flex-col items-center gap-8 rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-center sm:p-12 md:flex-row md:text-left">
+          <div className="relative grid h-36 w-36 shrink-0 place-items-center rounded-full border-4 border-amber-300/70 bg-gradient-to-b from-amber-300/20 to-ink-950 shadow-[0_0_50px_-10px_rgba(251,191,36,.8)]">
+            <div className="text-center">
+              <p className="font-display text-6xl font-black italic leading-none text-gold">{OFFER.guaranteeDays}</p>
+              <p className="font-display text-sm font-extrabold uppercase italic tracking-widest text-amber-200">dias</p>
+            </div>
+          </div>
+          <div>
+            <p className="eyebrow mb-3">Risco zero</p>
+            <h2 className="font-display text-4xl font-extrabold uppercase italic leading-none sm:text-5xl">
+              <span className="text-chrome">Garantia de</span> <span className="text-gold">{OFFER.guaranteeDays} dias</span>
+            </h2>
+            <p className="mt-4 text-lg text-slate-300">
+              Entra, assiste às aulas, aplica nos seus vídeos. Se em até {OFFER.guaranteeDays} dias você achar que não é pra
+              você, é só pedir o reembolso e recebe <strong className="text-white">100% do valor de volta</strong>. Sem
+              perguntas.
+            </p>
+          </div>
+        </Reveal>
       </section>
 
       {/* FAQ */}
@@ -826,11 +662,11 @@ export default function Home() {
               <span className="text-gradient">precisa disso</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-lg text-slate-300">
-              Entre agora no Grupo VIP. Quando o Mobile Edit abrir, você recebe primeiro o link com o{" "}
-              <strong className="text-gold">mega desconto de lançamento</strong> e o bônus exclusivo.
+              O método completo de edição no celular por <strong className="text-gold">R$ {OFFER.price}</strong>, com
+              acesso imediato e {OFFER.guaranteeDays} dias de garantia. O risco é todo nosso.
             </p>
             <div className="mt-10">
-              <CTA label="Quero o mega desconto" />
+              <CTA label="Quero o Mobile Edit" location="final" />
             </div>
           </div>
         </Reveal>
@@ -848,13 +684,13 @@ export default function Home() {
       </section>
 
       {/* CTA fixo no mobile */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-amber-300/30 bg-ink-950/90 p-3 backdrop-blur sm:hidden">
-        <GroupLink
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-neon/30 bg-ink-950/90 p-3 backdrop-blur sm:hidden">
+        <CheckoutLink
           location="fixo-mobile"
           className="btn-shine relative flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-neon-400 to-neon-deep py-3.5 font-display text-lg font-extrabold uppercase italic text-white"
         >
-          Garantir mega desconto no VIP <Arrow className="h-5 w-5" />
-        </GroupLink>
+          Quero o Mobile Edit <Arrow className="h-5 w-5" />
+        </CheckoutLink>
       </div>
     </main>
   );
