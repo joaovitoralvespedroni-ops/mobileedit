@@ -554,7 +554,7 @@ export default function Curso() {
 
           {/* cartão de preço */}
           <Reveal className="mt-12">
-            <div className="relative overflow-hidden rounded-[2rem] border-2 border-amber-300/70 bg-gradient-to-b from-amber-300/15 via-ink-900 to-ink-950 px-6 pb-10 pt-12 text-center shadow-[0_0_90px_-20px_rgba(251,191,36,.8)] sm:px-12">
+            <div id="preco" className="relative overflow-hidden rounded-[2rem] border-2 border-amber-300/70 bg-gradient-to-b from-amber-300/15 via-ink-900 to-ink-950 px-6 pb-10 pt-12 text-center shadow-[0_0_90px_-20px_rgba(251,191,36,.8)] sm:px-12">
               <span className="absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap rounded-b-xl bg-gradient-to-b from-amber-200 to-amber-500 px-5 py-1.5 font-display text-sm font-black uppercase italic text-ink-950">
                 Condição especial
               </span>
