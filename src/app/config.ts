@@ -24,20 +24,22 @@ export const SITE = {
 // Página de vendas direta (/curso).
 export const OFFER = {
   // Link do checkout (Hotmart, Kiwify etc.). Vazio = botões rolam até a seção de preço.
-  checkoutUrl: "https://pay.kiwify.com.br/5sqQPVl",
-  price: 197,
+  checkoutUrl: "https://pay.kiwify.com.br/vqgZUr2",
+  price: 97,
   // Texto de parcelamento exibido abaixo do preço (ex.: "ou 12x de R$ 9,74"). null esconde.
-  installments: "ou 6x de R$ 35,08" as string | null,
-  // Fim da condição de R$ 197. Use uma data REAL e suba o preço depois dela. null esconde o cronômetro.
-  endsAt: "2026-10-12T23:59:59-03:00" as string | null,
+  installments: "ou 6x de R$ 18,20" as string | null,
+  // Primeiro prazo do cronômetro da oferta. null esconde o cronômetro.
+  endsAt: "2026-10-17T00:00:00-03:00" as string | null,
+  // Cronômetro que se renova: ao chegar no prazo, ele pula mais N dias (17/10 → 19/10 → 21/10...). null = prazo fixo.
+  endsEveryDays: 2 as number | null,
   guaranteeDays: 7,
   // Ancoragem: o que a pessoa recebe e quanto cada parte valeria separada. Ajuste à vontade.
   stack: [
-    { title: "Fundamentos: equipamentos, apps e captação", detail: "Módulos 1 a 5", value: 97 },
-    { title: "CapCut do básico aos segredos", detail: "Módulos 6 a 8 · textos e legendas dinâmicas", value: 197 },
-    { title: "Edição na Prática: Iniciante, Intermediário e Avançado", detail: "Módulos 9 a 11 · do bruto ao export", value: 247 },
-    { title: "Vídeos com IA", detail: "Módulo 12", value: 147 },
-    { title: "Precificando seu Trabalho", detail: "Módulo 13 · cobre o que vale", value: 109 },
+    { title: "Fundamentos: equipamentos, apps e captação", detail: "Módulos 1 a 5", value: 47 },
+    { title: "CapCut do básico aos segredos", detail: "Módulos 6 a 8 · textos e legendas dinâmicas", value: 97 },
+    { title: "Edição na Prática: Iniciante, Intermediário e Avançado", detail: "Módulos 9 a 11 · do bruto ao export", value: 127 },
+    { title: "Vídeos com IA", detail: "Módulo 12", value: 67 },
+    { title: "Precificando seu Trabalho", detail: "Módulo 13 · cobre o que vale", value: 59 },
   ],
 };
 

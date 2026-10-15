@@ -562,7 +562,7 @@ export default function Curso() {
               {OFFER.endsAt && (
                 <div className="mb-10">
                   <p className="eyebrow mb-5 text-center">Esse preço acaba em</p>
-                  <Countdown target={OFFER.endsAt} />
+                  <Countdown target={OFFER.endsAt} repeatDays={OFFER.endsEveryDays ?? undefined} />
                 </div>
               )}
 

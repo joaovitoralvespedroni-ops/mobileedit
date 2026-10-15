@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-export function Countdown({ target }: { target: string }) {
+// Com repeatDays, `target` é o primeiro prazo e, ao passar dele, o prazo pula sozinho mais repeatDays dias.
+function deadline(target: number, now: number, repeatDays?: number) {
+  if (!repeatDays || now < target) return target;
+  const cycle = repeatDays * 86_400_000;
+  return target + (Math.floor((now - target) / cycle) + 1) * cycle;
+}
+
+export function Countdown({ target, repeatDays }: { target: string; repeatDays?: number }) {
   const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
@@ -15,7 +22,7 @@ export function Countdown({ target }: { target: string }) {
     };
   }, []);
 
-  const diff = now === null ? 0 : Math.max(0, new Date(target).getTime() - now);
+  const diff = now === null ? 0 : Math.max(0, deadline(new Date(target).getTime(), now, repeatDays) - now);
   const parts = [
     { label: "Dias", value: Math.floor(diff / 86_400_000) },
     { label: "Horas", value: Math.floor(diff / 3_600_000) % 24 },
