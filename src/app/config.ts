@@ -25,9 +25,13 @@ export const SITE = {
 export const OFFER = {
   // Link do checkout (Hotmart, Kiwify etc.). Vazio = botões rolam até a seção de preço.
   checkoutUrl: "https://pay.kiwify.com.br/vqgZUr2",
-  price: 97,
+  price: 67,
+  // Preço cheio riscado ("de R$ 97 por R$ 67"). null esconde e volta a riscar o valor total da ancoragem.
+  oldPrice: 97 as number | null,
+  // Nome da promoção na barra do topo, no hero e no cartão de preço. null volta ao texto padrão.
+  promo: "Black Friday" as string | null,
   // Texto de parcelamento exibido abaixo do preço (ex.: "ou 12x de R$ 9,74"). null esconde.
-  installments: "ou 6x de R$ 18,20" as string | null,
+  installments: "ou em até 6x no cartão" as string | null,
   // Primeiro prazo do cronômetro da oferta. null esconde o cronômetro.
   endsAt: "2026-10-17T00:00:00-03:00" as string | null,
   // Cronômetro que se renova: ao chegar no prazo, ele pula mais N dias (17/10 → 19/10 → 21/10...). null = prazo fixo.

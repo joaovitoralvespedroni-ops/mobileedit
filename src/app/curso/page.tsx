@@ -103,8 +103,17 @@ export default function Curso() {
       <div className="sticky top-0 z-40 border-b border-neon/30 bg-gradient-to-r from-neon-deep via-neon-400 to-neon-deep text-white shadow-[0_6px_30px_-6px_rgba(30,144,255,.6)]">
         <div className="mx-auto flex max-w-6xl items-center justify-center gap-4 px-4 py-2.5 text-center sm:justify-between">
           <p className="font-display text-sm font-extrabold uppercase italic leading-tight tracking-wide sm:text-base">
-            <span className="mr-2 inline-block rounded bg-ink-950 px-2 py-0.5 text-neon-300 not-italic">Oferta especial</span>
-            Condição de lançamento por <span className="underline decoration-2 underline-offset-2">tempo limitado</span>
+            <span className="mr-2 inline-block rounded bg-ink-950 px-2 py-0.5 text-neon-300 not-italic">{OFFER.promo ?? "Oferta especial"}</span>
+            {OFFER.oldPrice ? (
+              <>
+                De <span className="line-through decoration-2">{brl(OFFER.oldPrice)}</span> por {brl(OFFER.price)} ·{" "}
+                <span className="underline decoration-2 underline-offset-2">tempo limitado</span>
+              </>
+            ) : (
+              <>
+                Condição especial por <span className="underline decoration-2 underline-offset-2">tempo limitado</span>
+              </>
+            )}
           </p>
           <CheckoutLink
             location="barra-topo"
@@ -130,7 +139,7 @@ export default function Curso() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-300 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-300" />
                 </span>
-                Inscrições abertas
+                {OFFER.promo ?? "Inscrições abertas"}
               </span>
               <span className="rounded-full border border-neon/40 bg-neon/10 px-4 py-1.5 font-display text-sm font-bold uppercase italic tracking-wider text-neon-300">
                 Mobile Edit · com {SITE.instructorName}
@@ -157,7 +166,15 @@ export default function Curso() {
               ))}
             </ul>
 
-            <div className="mt-8 lg:max-w-md">
+            {OFFER.oldPrice && (
+              <p className="mt-7 font-display text-xl font-extrabold uppercase italic text-white sm:text-2xl">
+                {OFFER.promo ?? "Promoção"}: de{" "}
+                <span className="text-red-400 line-through decoration-2">{brl(OFFER.oldPrice)}</span> por{" "}
+                <span className="text-gold">{brl(OFFER.price)}</span>
+              </p>
+            )}
+
+            <div className={`${OFFER.oldPrice ? "mt-4" : "mt-8"} lg:max-w-md`}>
               <CTA label="Quero começar agora" location="hero" />
             </div>
           </div>
@@ -556,7 +573,7 @@ export default function Curso() {
           <Reveal className="mt-12">
             <div id="preco" className="relative overflow-hidden rounded-[2rem] border-2 border-amber-300/70 bg-gradient-to-b from-amber-300/15 via-ink-900 to-ink-950 px-6 pb-10 pt-12 text-center shadow-[0_0_90px_-20px_rgba(251,191,36,.8)] sm:px-12">
               <span className="absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap rounded-b-xl bg-gradient-to-b from-amber-200 to-amber-500 px-5 py-1.5 font-display text-sm font-black uppercase italic text-ink-950">
-                Condição especial
+                {OFFER.promo ?? "Condição especial"}
               </span>
 
               {OFFER.endsAt && (
@@ -567,7 +584,7 @@ export default function Curso() {
               )}
 
               <p className="text-sm font-bold uppercase tracking-[0.3em] text-slate-400">
-                De <span className="text-red-400 line-through decoration-2">{brl(STACK_TOTAL)}</span> por apenas
+                De <span className="text-red-400 line-through decoration-2">{brl(OFFER.oldPrice ?? STACK_TOTAL)}</span> por apenas
               </p>
               <p className="mt-3 font-display font-black italic leading-none text-gold drop-shadow-[0_0_40px_rgba(251,191,36,.45)]">
                 <span className="align-top text-4xl sm:text-5xl">R$</span>
@@ -662,7 +679,8 @@ export default function Curso() {
               <span className="text-gradient">precisa disso</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-lg text-slate-300">
-              O método completo de edição no celular por <strong className="text-gold">R$ {OFFER.price}</strong>, com
+              O método completo de edição no celular por <strong className="text-gold">R$ {OFFER.price}</strong>
+              {OFFER.promo ? ` na ${OFFER.promo}` : ""}, com
               acesso imediato e {OFFER.guaranteeDays} dias de garantia. O risco é todo nosso.
             </p>
             <div className="mt-10">
