@@ -54,8 +54,8 @@ export const VSL = {
   playerId: "6af7588940ab0c1e12e38782",
   scriptUrl:
     "https://scripts.converteai.net/2b428afb-3f87-43d1-9d75-4f5dc77e5e0a/players/6af7588940ab0c1e12e38782/v4/player.js",
-  // Segundo do vídeo em que a página libera. Deixe igual ao botão configurado no VTurb (hoje 1:30).
-  unlockAt: 90,
+  // Segundo do vídeo em que a página libera. Deixe igual ao botão configurado no VTurb (hoje 0:40).
+  unlockAt: 40,
   // Segundos assistidos que viram evento no Meta Pixel (VSL_30s, VSL_60s...), para montar públicos.
   // O momento da liberação vira "VSL_Oferta" e o fim do vídeo vira "VSL_Completo".
   pixelMarks: [30, 60],
