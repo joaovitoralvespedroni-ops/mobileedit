@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CTA, HeroBullets, HeroPrice, MobileCTA, OfferBar, SalesBody } from "../components/SalesSections";
+import { CTA, HeroBullets, HeroPrice, OfferBar, SalesBody } from "../components/SalesSections";
 import { VslLocked, VslPlayer } from "../components/Vsl";
 
 export const metadata: Metadata = {
@@ -51,7 +51,6 @@ export default function Vsl() {
 
       <VslLocked>
         <SalesBody />
-        <MobileCTA />
       </VslLocked>
     </main>
   );
