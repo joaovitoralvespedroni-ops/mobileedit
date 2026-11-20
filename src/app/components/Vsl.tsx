@@ -9,9 +9,10 @@ import { VSL } from "../config";
 
 const STORAGE_KEY = `vsl-liberada-${VSL.playerId}`;
 const listeners = new Set<() => void>();
-let unlocked = false;
+const ALWAYS_OPEN = VSL.unlockAt === null;
+let unlocked = ALWAYS_OPEN;
 
-if (typeof window !== "undefined") {
+if (!ALWAYS_OPEN && typeof window !== "undefined") {
   try {
     unlocked = localStorage.getItem(STORAGE_KEY) === "1";
   } catch {}
@@ -34,7 +35,7 @@ function useUnlocked() {
       return () => listeners.delete(l);
     },
     () => unlocked,
-    () => false,
+    () => ALWAYS_OPEN,
   );
 }
 
@@ -65,7 +66,7 @@ export function VslPlayer({ className = "", style }: { className?: string; style
     const onTime = (e: Event) => {
       const t = (e as CustomEvent<{ time?: number }>).detail?.time ?? 0;
       for (const m of VSL.pixelMarks) if (t >= m) track(`VSL_${m}s`);
-      if (t >= VSL.unlockAt) {
+      if (VSL.unlockAt !== null && t >= VSL.unlockAt) {
         track("VSL_Oferta");
         unlock();
       }
